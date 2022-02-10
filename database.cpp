@@ -4,9 +4,9 @@
 DataBase::DataBase(QString host,QString port,QString dbName,QString username,QString passwd)
 {
     m_db = QSqlDatabase::addDatabase("QPSQL");
-    m_db.setHostName(host);//("127.0.0.1");
-    m_db.setPort(port.toInt());//(5432);
-    m_db.setDatabaseName(dbName);//("postgres");
+    m_db.setHostName(host);
+    m_db.setPort(port.toInt());
+    m_db.setDatabaseName(dbName);
     m_db.setUserName(username);
     m_db.setPassword(passwd);
 

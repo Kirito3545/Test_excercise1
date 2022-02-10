@@ -170,66 +170,6 @@ MainWidget::MainWidget(QWidget* parent)
     ui->lineEditUserName->setText("postgres");
     ui->lineEditPasswd->setText("123456");
 
-
-//    db = QSqlDatabase::addDatabase("QPSQL");
-//    db.setHostName(ui->lineEditHost->text());//("127.0.0.1");
-//    db.setPort(ui->lineEditPort->text().toInt());//(5432);
-//    db.setDatabaseName(ui->lineEditDBName->text());//("postgres");
-//    db.setUserName(ui->lineEditUserName->text());//("postgres");
-//    db.setPassword(ui->lineEditPasswd->text());//
-
-//        try
-//        {
-//            if (!db.open())
-//                throw false;
-//        }
-//        catch (bool&)
-//        {
-//            qDebug() << "Exception handled " << '\n';
-//            qDebug() << db.lastError().text() << '\n';
-//            //
-//            QMessageBox fail;
-//            fail.setText("Exception handle! ");
-//            fail.setIcon(QMessageBox::Information);
-//            fail.exec();
-//            exit(0);
-//        }
-
-
-
-
-
-//        QSqlQuery query = QSqlQuery(db);
-//        QString queryStr = "SELECT EXISTS ( \
-//             SELECT FROM information_schema.tables \
-//             WHERE table_schema = 'public'\
-//             AND    table_name   = 'files_arc' \
-//             );";
-//        if (!query.exec(queryStr))
-//        {
-//            qDebug() << query.lastError().databaseText();
-//            qDebug() << query.lastError().driverText();
-
-//            QMessageBox succes;
-//            succes.setText("Exception handle! ");
-//            succes.setIcon(QMessageBox::Information);
-//            succes.exec();
-//        }
-
-//        QSqlQuery query1("SELECT * FROM files_arc");
-//        while (query1.next()) {
-//            auto const id = query.value(0).toInt();
-//            auto const name = query.value(1).toString();
-//            auto const body = query.value(2).toString();
-//            qInfo() << query1.value(0).toString().toLocal8Bit() << query.value(1).toString().toLocal8Bit() << query.value(2).toString();
-//            qDebug() << id << name << body << '\n';
-//        }
-
-
-
-
-
-
     connect(ui->pushButton, &QPushButton::clicked, this,&MainWidget::on_pushButton_clicked);
     connect(ui->pushButtonConnect, &QPushButton::clicked, this,&MainWidget::pushButtonConnectClicked);
 }
@@ -282,65 +222,6 @@ void MainWidget::on_pushButton_clicked()
         qDebug() << "Could not open file for read";
 
     }
-
-
-
-   // ui->tableVi
-
-//        QSqlQuery query = QSqlQuery(db);
-//        QString queryStr = "SELECT EXISTS ( \
-//                 SELECT FROM information_schema.tables \
-//                 WHERE  table_schema = 'public'\
-//                 AND    table_name   = 'files_arc' \
-//                 );";
-//        if (!query.exec(queryStr))
-//        {
-//            qDebug() << query.lastError().databaseText();
-//            qDebug() << query.lastError().driverText();
-
-//        }
-//        qDebug() << "Table exists" << '\n';
-//        QSqlQuery qry;
-
-//        //creation files_arc table query
-//        /* create table FILES_ARC(fileID serial primary key,
-//         * name varchar(255) not null,body bytea);
-//         * */
-//        qry.prepare("INSERT INTO files_arc(fileid,name, body) VALUES( :NAME, :BODY)");
-//        //qry.bindValue(":ID", 33);
-//        qry.bindValue(":NAME", fileName);
-//        qry.bindValue(":BODY", ba);
-
-
-//        if (qry.exec())
-//        {
-//            qDebug() << "success!! added record" << '\n';
-//            QMessageBox succes;
-//            succes.setText("file" + fileName + " added!");
-//            succes.setIcon(QMessageBox::Information);
-//            succes.exec();
-//        }
-
-//        while (qry.next())
-//        {
-//            qDebug() << qry.record();
-//        }
-
-
-
-
-//        QSqlQuery query1 = QSqlQuery(db);
-//        if (!query1.exec("select * from files_arc"))
-//        {
-//            qDebug() << query1.lastError().databaseText();
-//            qDebug() << query1.lastError().driverText();
-//            return;
-//        }
-//        while (query1.next())
-//        {
-//            qDebug() << query1.record();
-//        }
-
 
 }
 
