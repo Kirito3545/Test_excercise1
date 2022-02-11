@@ -162,11 +162,11 @@ QSqlRecord(4)
         ent["f2"] = query.value(2).toString();
         ent["f3"] = query.value(3).toString();
         ent["f4"] = query.value(4).toString();
-        qDebug() << ent;
-
+        //qDebug() << ent;
+        qDebug()<<query.record();
         res.append(ent);
     }
-    qDebug() << res;
+    //qDebug() << res;
     return result;
 }
 
