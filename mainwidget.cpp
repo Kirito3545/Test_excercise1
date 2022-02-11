@@ -169,7 +169,7 @@ MainWidget::MainWidget(QWidget* parent)
     ui->lineEditDBName->setText("postgres");
     ui->lineEditUserName->setText("postgres");
     ui->lineEditPasswd->setText("123456");
-
+    ui->tableNameEdit->setText("files_arc");
     connect(ui->pushButton, &QPushButton::clicked, this,&MainWidget::on_pushButton_clicked);
     connect(ui->pushButtonConnect, &QPushButton::clicked, this,&MainWidget::pushButtonConnectClicked);
 }
@@ -186,20 +186,25 @@ void MainWidget::pushButtonConnectClicked()
                            ui->lineEditDBName->text(),
                            ui->lineEditUserName->text(),
                            ui->lineEditPasswd->text());
-    //TODO:  make QLineText tableName      send this code to another button SLOT
-    QString tableName = "files_arc1hlkjhl";
+    //TODO:  make QLineText tableName      send this code to another button SLOT: DONE
+    QString tableName = ui->tableNameEdit->text();
+
     if (!db->isExistsDb(tableName))
+    {
         qDebug() << "table Not Exists\n";
-
-
-    qDebug()<<db->getContent(tableName);
+        QMessageBox succes;
+        succes.setText("table Not Exists");
+        succes.setIcon(QMessageBox::Information);
+        succes.exec();
+    }
+    qDebug()<<db->getContent(tableName);// ????????
 }
 
 
 void MainWidget::on_pushButton_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Open Text file"), "..", tr("All Files (*.*)"));
+    QString fileName = QFileDialog::getOpenFileName(this,"Add file","/home",
+        tr("All Files (*.*)"));
     QFile file(fileName);
     QByteArray fileBody;
     try
@@ -209,10 +214,11 @@ void MainWidget::on_pushButton_clicked()
             throw false;
         }
 
-        file.close();
+
         //fill it by some data
-        fileBody = file.readAll();
         // Read from file
+        fileBody = file.readAll();
+
         file.close();
     }
 
@@ -220,7 +226,10 @@ void MainWidget::on_pushButton_clicked()
     {
 
         qDebug() << "Could not open file for read";
-
+        QMessageBox succes;
+        succes.setText("file Not Exists");
+        succes.setIcon(QMessageBox::Information);
+        succes.exec();
     }
 
 }
