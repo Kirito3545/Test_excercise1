@@ -232,5 +232,21 @@ void MainWidget::on_pushButton_clicked()
         succes.exec();
     }
 
+    //creation files_arc table query
+     /* create table FILES_ARC(fileID serial primary key,
+      * name varchar(255) not null,body bytea);
+      * */
+
+    if (!(db->addRecord(fileName, fileBody)))
+    {
+
+        qDebug() << "Not recorded to db";
+        QMessageBox succes;
+        succes.setText("Not recorded to db");
+        succes.setIcon(QMessageBox::Information);
+        succes.exec();
+    }
+    //file.close();
+
 }
 

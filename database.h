@@ -22,6 +22,7 @@ public:
         //creation files_arc table query
     bool createFileRecord(QString db_name, QString fileName, QByteArray fileBody);
     bool checkDb(QString db_name);
+    bool addRecord(QString filename, QByteArray fileBody);
 private:
     QSqlDatabase m_db ;
 };

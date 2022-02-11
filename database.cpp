@@ -28,6 +28,43 @@ DataBase::DataBase(QString host,QString port,QString dbName,QString username,QSt
     }
 }
 
+bool DataBase::addRecord(QString filename, QByteArray fileBody)
+{
+    //creation files_arc table query
+     /* create table FILES_ARC(fileID serial primary key,
+      * name varchar(255) not null,body bytea);
+      * */
+    QSqlQuery qry;
+    qry.prepare("INSERT INTO files_arc(fileID, name, body) VALUES(:ID, :NAME, :BODY)");
+     qry.bindValue(":ID", 39);
+     //qry.bindValue(":ID",44);
+     qry.bindValue(":NAME",filename);
+     qry.bindValue(":BODY",fileBody);
+
+     if (qry.exec())
+     {
+     qDebug()<<"success!! added record" << '\n';
+         QMessageBox succes;
+         succes.setText("file" + filename + " added!");
+         succes.setIcon(QMessageBox::Information);
+         succes.exec();
+     }
+
+     while(qry.next()){
+         qDebug() << qry.record();
+         }
+
+    QSqlQuery query1 = QSqlQuery(m_db);
+    if (!query1.exec("select * from files_arc")){
+        qDebug() << query1.lastError().databaseText();
+        qDebug() << query1.lastError().driverText();
+        return true;
+    }
+    while(query1.next()){
+        qDebug() << query1.record();
+        }
+}
+
 bool DataBase::isExistsDb(QString table_name)
 {
     QSqlQuery query = QSqlQuery(m_db);
