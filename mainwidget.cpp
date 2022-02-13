@@ -196,6 +196,15 @@ void MainWidget::pushButtonConnectClicked()
         succes.setText("table Not Exists");
         succes.setIcon(QMessageBox::Information);
         succes.exec();
+        QMessageBox::StandardButton reply;
+          reply = QMessageBox::question(this, "Table creation", "Create table " + tableName + "?",
+                                        QMessageBox::Yes|QMessageBox::No);
+          if (reply == QMessageBox::Yes) {
+            qDebug() << "Yes was clicked";
+            QApplication::quit();
+          } else {
+            qDebug() << "Yes was *not* clicked";
+          }
     }
     qDebug()<<db->getContent(tableName);// ????????
 }
@@ -247,6 +256,10 @@ void MainWidget::on_pushButton_clicked()
         succes.exec();
     }
     //file.close();
+
+    //getting result of query in our field on form -
+    QString sizeOfRecord = QString(db->getSizeOfRecord(ui->lineEditDBName->text(),ui->tableNameEdit->text()));
+    ui->textEdit->setText(db->getContent(ui->lineEditDBName->text()) + " " + sizeOfRecord);
 
 }
 

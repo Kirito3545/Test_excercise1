@@ -76,7 +76,7 @@ bool DataBase::isExistsDb(QString table_name)
                      WHERE table_schema = 'public'\
                      AND table_name = '"+table_name+"'\
                  )";
-
+        qDebug() << "sendig qury: " << queryStr;
          /*
          SELECT EXISTS
          (
@@ -112,10 +112,48 @@ SELECT EXISTS
     {
         qDebug() << query.lastError().databaseText();
         qDebug() << query.lastError().driverText();
-        qDebug() << "Can't create " << table_name << "table\n";
+        qDebug() << "Can't find " << table_name << "table\n";
 
         QMessageBox succes;
         succes.setText("Exception handle! Please create a table " + table_name);
+        succes.setIcon(QMessageBox::Information);
+        succes.exec();
+    }
+    int i = 0;
+    while (query.next())
+    {
+        if (!(query.value(i).toInt() ==1)) return false;
+        qDebug() << query.value(i).toBool();
+        i++;
+    }
+
+    return true;
+}
+
+bool DataBase::createTable(QString table_name)
+{
+    QSqlQuery query = QSqlQuery(m_db);
+    try{
+         QString queryStr = "SELECT IF NOT EXISTS \
+                 (\
+                     create table "+table_name+"(fileID serial primary key,name varchar(255) not null,body bytea);\
+                 )";
+        qDebug() << "sendig qury: " << queryStr;
+
+        if (!query.exec(queryStr))
+        {
+            throw false;
+
+        }
+    }
+    catch (bool&)
+    {
+        qDebug() << query.lastError().databaseText();
+        qDebug() << query.lastError().driverText();
+        qDebug() << "Can't create " << table_name << "table\n";
+
+        QMessageBox succes;
+        succes.setText("Exception handle! Error " + table_name);
         succes.setIcon(QMessageBox::Information);
         succes.exec();
     }
@@ -165,7 +203,12 @@ QSqlRecord(4)
         //qDebug() << ent;
         qDebug()<<query.record();
         res.append(ent);
+        result.append("id");
+        for (int cnt=0;cnt<query.size();cnt++){
+            result.append(query.value(cnt).toString());
+        }
     }
+
     //qDebug() << res;
     return result;
 }
@@ -226,7 +269,7 @@ bool DataBase::checkDb(QString db_name)
 }
 
 
-int DataBase::getSizeOfRecord(QString table_name, QString record_name)
+    int DataBase::getSizeOfRecord(QString table_name, QString record_name)
 {
     QSqlQuery query = QSqlQuery(m_db);
     try{

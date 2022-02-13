@@ -37,7 +37,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>-1</x>
@@ -51,6 +51,9 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QListView" name="listView"/>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="textEdit"/>
        </item>
        <item>
         <widget class="QPushButton" name="pushButton">
