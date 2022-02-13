@@ -224,3 +224,41 @@ bool DataBase::checkDb(QString db_name)
     }
     return true;
 }
+
+
+int DataBase::getSizeOfRecord(QString table_name, QString record_name)
+{
+    QSqlQuery query = QSqlQuery(m_db);
+    try{
+         QString queryStr = "(select length("+record_name+") as filesize \
+                     from files_arc; '"+table_name+"'\
+                 )";
+
+
+        if (!query.exec(queryStr))
+        {
+            throw false;
+
+        }
+    }
+    catch (bool&)
+    {
+        qDebug() << query.lastError().databaseText();
+        qDebug() << query.lastError().driverText();
+        qDebug() << "Can't create " << table_name << "table\n";
+
+        QMessageBox succes;
+        succes.setText("Exception handle! Can't get from record "+record_name+" with table name " + table_name);
+        succes.setIcon(QMessageBox::Critical);
+        succes.exec();
+    }
+    int i = 0;
+    while (query.next())
+    {
+        //if (!(query.value(i).toInt() ==1)) return false;
+        qDebug() << query.record();
+        //i++;
+    }
+
+    return true;
+}
