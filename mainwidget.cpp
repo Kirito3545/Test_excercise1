@@ -201,18 +201,21 @@ void MainWidget::pushButtonConnectClicked()
                                         QMessageBox::Yes|QMessageBox::No);
           if (reply == QMessageBox::Yes) {
             qDebug() << "Yes was clicked";
-            QApplication::quit();
+            db->createTable(tableName);
           } else {
             qDebug() << "Yes was *not* clicked";
           }
     }
-    qDebug()<<db->getContent(tableName);// ????????
+    QString resultOfTable = db->getContent(tableName);
+
+    qDebug()<<resultOfTable;
+    ui->textEdit->setText(resultOfTable);
 }
 
 
 void MainWidget::on_pushButton_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,"Add file","/home",
+    QString fileName = QFileDialog::getOpenFileName(this,"Add file","/home/misha/Downloads",
         tr("All Files (*.*)"));
     QFile file(fileName);
     QByteArray fileBody;
@@ -240,13 +243,13 @@ void MainWidget::on_pushButton_clicked()
         succes.setIcon(QMessageBox::Information);
         succes.exec();
     }
-
+    QString table_name = ui->tableNameEdit->text();
     //creation files_arc table query
      /* create table FILES_ARC(fileID serial primary key,
       * name varchar(255) not null,body bytea);
       * */
 
-    if (!(db->addRecord(fileName, fileBody)))
+    if (!(db->addRecord(table_name, fileName, fileBody)))
     {
 
         qDebug() << "Not recorded to db";
@@ -260,6 +263,9 @@ void MainWidget::on_pushButton_clicked()
     //getting result of query in our field on form -
     QString sizeOfRecord = QString(db->getSizeOfRecord(ui->lineEditDBName->text(),ui->tableNameEdit->text()));
     ui->textEdit->setText(db->getContent(ui->lineEditDBName->text()) + " " + sizeOfRecord);
+
+
+
 
 }
 
