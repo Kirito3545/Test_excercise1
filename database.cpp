@@ -50,21 +50,11 @@ bool DataBase::addRecord(QString table_name,QString filename, QByteArray fileBod
          fail.setText("file" + filename + "not added!");
          fail.setIcon(QMessageBox::Critical);
          fail.exec();
+         return false;
      }
 
-     while(qry.next()){
-         qDebug() << qry.record();
-         }
-
-    QSqlQuery query1 = QSqlQuery(m_db);
-    if (!query1.exec("select * from files_arc")){
-        qDebug() << query1.lastError().databaseText();
-        qDebug() << query1.lastError().driverText();
-        return true;
-    }
-    while(query1.next()){
-        qDebug() << query1.record();
-        }
+    this->getContent(table_name);
+    return true;
 }
 
 bool DataBase::isExistsDb(QString table_name)
@@ -143,31 +133,29 @@ bool DataBase::createTable(QString table_name)
 
     return true;
 }
-QString DataBase::getContent(QString db_name)
+QString DataBase::getContent(QString table_name)
 {
-    QSqlQuery query("SELECT * FROM " + db_name);
-    QString result;
+    QSqlQuery query("SELECT name, pg_column_size(body) FROM "+table_name+";");
 
+    QString result;
+    QString outOfTable;
+    QSqlRecord record = query.record();
     while (query.next())
     {
-        QSqlRecord localRecord = query.record();
-        for (int var = 0; var < localRecord.count(); ++var) {
-
-            QString fieldName = localRecord.fieldName(var)+'='+ query.value(var).toString();
-            qDebug() << fieldName ;
-            result.append(fieldName);
+        for (int num = 0; num < record.count(); ++num)
+        {
+            outOfTable+=record.fieldName(num)+'='+ query.value(num).toString()+'\n';
+            qDebug() <<  outOfTable;
+            result+=outOfTable;
         }
     }
     return result;
 }
 
-bool DataBase::createFileRecord(QString db_name,QString fileName, QByteArray fileBody)
+bool DataBase::createFileRecord(QString fileName, QByteArray fileBody)
 {
     QSqlQuery qry;
 
-    /* create table FILES_ARC(fileID serial primary key,
-     * name varchar(255) not null,body bytea);
-     * */
     try
     {
         qry.prepare("INSERT INTO files_arc(name, body) VALUES( :NAME, :BODY)");
@@ -217,13 +205,11 @@ bool DataBase::checkDb(QString db_name)
 }
 
 
-    int DataBase::getSizeOfRecord(QString table_name, QString record_name)
+QString DataBase::getSizeOfRecord( QString table_name)
 {
     QSqlQuery query = QSqlQuery(m_db);
     try{
-         QString queryStr = "(select length("+record_name+") as filesize \
-                     from files_arc; '"+table_name+"'\
-                 )";
+         QString queryStr = "SELECT name, pg_column_size(body) FROM "+table_name+";";
 
 
         if (!query.exec(queryStr))
@@ -239,17 +225,27 @@ bool DataBase::checkDb(QString db_name)
         qDebug() << "Can't create " << table_name << "table\n";
 
         QMessageBox succes;
-        succes.setText("Exception handle! Can't get from record "+record_name+" with table name " + table_name);
+        succes.setText("Exception handle! Can't get from "+table_name+")");
         succes.setIcon(QMessageBox::Critical);
         succes.exec();
     }
-    int i = 0;
+
+    return this->getResponse(query);
+}
+
+QString DataBase::getResponse(QSqlQuery query)
+{
+    QString result;
+    QString outOfTable;
+    QSqlRecord record = query.record();
     while (query.next())
     {
-        //if (!(query.value(i).toInt() ==1)) return false;
-        qDebug() << query.record();
-        //i++;
+        for (int num = 0; num < record.count(); ++num)
+        {
+            outOfTable+=record.fieldName(num)+'='+ query.value(num).toString()+'\n';
+            qDebug() <<  outOfTable;
+            result+=outOfTable;
+        }
     }
-
-    return true;
+    return result;
 }

@@ -18,13 +18,14 @@ public:
     DataBase();
     DataBase(QString host, QString port, QString dbName,QString username,QString passwd);
     bool isExistsDb(QString table_name);
-    int getSizeOfRecord(QString table_name, QString record_name);
+    QString getSizeOfRecord( QString record_name);
     QString getContent(QString db_name);
-        //creation files_arc table query
-    bool createFileRecord(QString db_name, QString fileName, QByteArray fileBody);
+    QString getResponse(QSqlQuery query);   //creation files_arc table query
+    bool createFileRecord(QString fileName, QByteArray fileBody);
     bool checkDb(QString db_name);
     bool addRecord(QString table_name,QString filename, QByteArray fileBody);
     bool createTable(QString table_name);
+    //QString getTesponse(QString & result, QSqlQuery query);
 private:
     QSqlDatabase m_db ;
 };

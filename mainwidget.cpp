@@ -1,145 +1,3 @@
-//#include "mainwidget.h"
-//#include "ui_mainwidget.h"
-//#include <QDebug>
-//#include <QMessageBox>
-//#include <QFileDialog>
-//#include <QtSql/QSqlError>
-//#include <QtSql/QSqlRecord>
-
-//MainWidget::MainWidget(QWidget *parent)
-//    : QMainWindow(parent)
-//    , ui(new Ui::MainWidget)
-//{
-//    ui->setupUi(this);
-
-
-
-
-//    try {
-
-//            db = QSqlDatabase::addDatabase("QPSQL");
-//            db.setHostName("127.0.0.1");
-//            db.setPort(5432);
-//            db.setDatabaseName("postgres");
-//            db.setUserName("postgres");
-//            db.setPassword("123456");
-//            if (!db.open()){
-//                qDebug() << db.lastError().text();
-//            }
-//            else {
-//                qDebug() << "Success!";
-
-//            }
-
-
-//           QSqlQuery query("SELECT * FROM files_arc");
-//           //query.first();
-//           //auto response = query.value(0).toString();
-//           //qDebug() << response;
-//           while (query.next()) {
-//               auto const id = query.value(0).toInt();
-//               auto const name = query.value(1).toString();
-//               auto const price = query.value(2).toString();
-//               qInfo() << query.value(0).toString().toLocal8Bit()<< query.value(1).toString().toLocal8Bit()<< query.value(2).toString();
-//               qDebug() << id << name << price << '\n';
-//           }
-
-////           if (db.transaction()) {
-////               QSqlQuery query;
-////               query.prepare("INSERT INTO PRODUCTS(ID, NAME, PRICE) VALUES(:ID, :NAME, :PRICE)");
-////               query.bindValue(":ID", 4);
-////               query.bindValue(":NAME", "D");
-////               query.bindValue(":PRICE", "4.4");
-////               query.exec();
-////               db.commit();
-////               qDebug() << db.lastError();
-////           }
-
-
-//       } catch (std::exception const& e) {
-
-//       }
-
-//    connect( ui->pushButton,&QPushButton::clicked,this,&MainWidget::on_pushButton_clicked);
-//}
-
-//MainWidget::~MainWidget()
-//{
-//    delete ui;
-//}
-
-
-//void MainWidget::on_pushButton_clicked()
-//{
-//    try
-//    {
-//    QString fileName = QFileDialog::getOpenFileName(this,
-//        tr("Open Text file"), "", tr("All Files (*.*)"));
-//    QFile file(fileName);
-//    if (!file.open(QFile::ReadOnly)) {
-//     qDebug() << "Could not open file for reading";
-//     return;
-//    }
-//    //fill it by some data
-//     QByteArray ba = file.readAll();
-//     // Read from file
-
-//     //qDebug()<< ba.toHex();
-
-//    /*SELECT EXISTS (
-//     SELECT FROM information_schema.tables
-//     WHERE  table_schema = 'public'
-//     AND    table_name   = 'files_arc'
-//     );*/
-//     QSqlQuery query = QSqlQuery(db);
-//     QString queryStr = "SELECT EXISTS ( \
-//             SELECT FROM information_schema.tables \
-//             WHERE  table_schema = 'public'\
-//             AND    table_name   = 'files_arc' \
-//             );";
-//     if (!query.exec(queryStr))
-//     {
-//         qDebug() << query.lastError().databaseText();
-//         qDebug() << query.lastError().driverText();
-//         return;//TODO: try catch
-//     }
-//     qDebug() << "Table exists" << '\n';
-//     QSqlQuery qry;
-
-//     //creation files_arc table query
-//     /* create table FILES_ARC(fileID serial primary key,
-//      * name varchar(255) not null,body bytea);
-//      * */
-//     qry.prepare("INSERT INTO files_arc(fileID, name, body) VALUES(:ID, :NAME, :BODY)");
-//     qry.bindValue(":ID", 39);
-//     //qry.bindValue(":ID",44);
-//     qry.bindValue(":NAME",fileName);
-//     qry.bindValue(":BODY",ba);
-
-//     if (qry.exec())
-//         {
-//         qDebug()<<"success!! added record" << '\n';
-//             QMessageBox succes;
-//             succes.setText("file" + fileName + " added!");
-//             succes.setIcon(QMessageBox::Information);
-//             succes.exec();
-//         }
-//     while(query.next()){
-//         qDebug() << query.record();
-//         }
-
-//    QSqlQuery query1 = QSqlQuery(db);
-//    if (!query1.exec("select * from files_arc")){
-//        qDebug() << query1.lastError().databaseText();
-//        qDebug() << query1.lastError().driverText();
-//        return;
-//    }
-//    while(query1.next()){
-//        qDebug() << query1.record();
-//        }
-
-//    file.close();
-//}
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
 #include <QDebug>
@@ -169,7 +27,7 @@ MainWidget::MainWidget(QWidget* parent)
     ui->lineEditDBName->setText("postgres");
     ui->lineEditUserName->setText("postgres");
     ui->lineEditPasswd->setText("123456");
-    ui->tableNameEdit->setText("files_arc");
+    ui->tableNameEdit->setText("files_arc3367890");
     connect(ui->pushButton, &QPushButton::clicked, this,&MainWidget::on_pushButton_clicked);
     connect(ui->pushButtonConnect, &QPushButton::clicked, this,&MainWidget::pushButtonConnectClicked);
 }
@@ -215,8 +73,8 @@ void MainWidget::pushButtonConnectClicked()
 
 void MainWidget::on_pushButton_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,"Add file","/home/misha/Downloads",
-        tr("All Files (*.*)"));
+    QString fileName = QFileDialog::getOpenFileName(this,"Add file","/home/misha",
+        "All Files (*.*)");
     QFile file(fileName);
     QByteArray fileBody;
     try
@@ -225,8 +83,6 @@ void MainWidget::on_pushButton_clicked()
         {
             throw false;
         }
-
-
         //fill it by some data
         // Read from file
         fileBody = file.readAll();
@@ -242,12 +98,10 @@ void MainWidget::on_pushButton_clicked()
         succes.setText("file Not Exists");
         succes.setIcon(QMessageBox::Information);
         succes.exec();
+        return;
     }
     QString table_name = ui->tableNameEdit->text();
     //creation files_arc table query
-     /* create table FILES_ARC(fileID serial primary key,
-      * name varchar(255) not null,body bytea);
-      * */
 
     if (!(db->addRecord(table_name, fileName, fileBody)))
     {
@@ -257,15 +111,14 @@ void MainWidget::on_pushButton_clicked()
         succes.setText("Not recorded to db");
         succes.setIcon(QMessageBox::Information);
         succes.exec();
+        return;
     }
     //file.close();
 
-    //getting result of query in our field on form -
-    QString sizeOfRecord = QString(db->getSizeOfRecord(ui->lineEditDBName->text(),ui->tableNameEdit->text()));
-    ui->textEdit->setText(db->getContent(ui->lineEditDBName->text()) + " " + sizeOfRecord);
-
-
-
-
+    //getting result of query in our field on form -SELECT id, pg_column_size(id), val, pg_column_size(val) FROM foo;
+    QString sizeOfRecord = QString(db->getSizeOfRecord(ui->tableNameEdit->text()));
+    QString add = ui->textEdit->toPlainText();
+    ui->textEdit->setText(db->getContent(add + '\n' +  ui->lineEditDBName->text()) + " " + sizeOfRecord);
+    return;
 }
 
