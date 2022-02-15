@@ -209,7 +209,7 @@ QString DataBase::getSizeOfRecord( QString table_name)
 {
     QSqlQuery query = QSqlQuery(m_db);
     try{
-         QString queryStr = "SELECT name, pg_column_size(body) FROM "+table_name+";";
+         QString queryStr = "SELECT name, concat(length(body) / 1048576.0, ' MB') FROM "+table_name+";";
 
 
         if (!query.exec(queryStr))
@@ -238,14 +238,14 @@ QString DataBase::getResponse(QSqlQuery query)
     QString result;
     QString outOfTable;
     QSqlRecord record = query.record();
+    result+="List of files:\n";
     while (query.next())
     {
-        for (int num = 0; num < record.count(); ++num)
-        {
-            outOfTable+=record.fieldName(num)+'='+ query.value(num).toString()+'\n';
-            qDebug() <<  outOfTable;
-            result+=outOfTable;
-        }
+        result+="  Record:\n";
+        result+=record.fieldName(0)+'='+ query.value(0).toString()+'\n';
+        result+="size="+query.value(1).toString()+'\n';
+ //     result+="size="+query.value(1).toString()+'\n';
+        qDebug() <<  result;
     }
     return result;
 }

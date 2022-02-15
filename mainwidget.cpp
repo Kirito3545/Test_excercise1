@@ -64,10 +64,11 @@ void MainWidget::pushButtonConnectClicked()
             qDebug() << "Yes was *not* clicked";
           }
     }
-    QString resultOfTable = db->getContent(tableName);
+    //QString resultOfTable = db->getContent(tableName);
 
-    qDebug()<<resultOfTable;
-    ui->textEdit->setText(resultOfTable);
+    QString sizeOfRecord = QString(db->getSizeOfRecord(ui->tableNameEdit->text()));
+    QString add = ui->textEdit->toPlainText();
+    ui->textEdit->setText(db->getContent(add + '\n' +  ui->lineEditDBName->text()) + " " + sizeOfRecord);
 }
 
 
