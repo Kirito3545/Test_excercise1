@@ -209,8 +209,8 @@ QString DataBase::getSizeOfRecord( QString table_name)
 {
     QSqlQuery query = QSqlQuery(m_db);
     try{
-         QString queryStr = "SELECT name, concat(length(body) / 1048576.0, ' MB') FROM "+table_name+";";
-
+         QString queryStr = "SELECT name, concat(length(body)/1000, ' KB') FROM "+table_name+";";
+//1024 / 1048576.0
 
         if (!query.exec(queryStr))
         {
@@ -236,7 +236,6 @@ QString DataBase::getSizeOfRecord( QString table_name)
 QString DataBase::getResponse(QSqlQuery query)
 {
     QString result;
-    QString outOfTable;
     QSqlRecord record = query.record();
     result+="List of files:\n";
     while (query.next())

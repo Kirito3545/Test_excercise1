@@ -25,7 +25,6 @@ public:
     bool checkDb(QString db_name);
     bool addRecord(QString table_name,QString filename, QByteArray fileBody);
     bool createTable(QString table_name);
-    //QString getTesponse(QString & result, QSqlQuery query);
 private:
     QSqlDatabase m_db ;
 };
